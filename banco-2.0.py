@@ -37,7 +37,7 @@ if __name__ == '__main__':
         if escolha == "1":
             defs.cadastrar_dados()
         elif escolha == "2":
-            defs.validar_dados()
+            defs.acessar_sistema()
         elif escolha == "3":
             print("Obrigado por usar nosso sistema!")
             conn.close()
