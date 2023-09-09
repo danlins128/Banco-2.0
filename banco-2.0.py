@@ -3,11 +3,12 @@ import sqlite3
 conn = sqlite3.connect('dados_cadastrais.db')
 
 cursor = conn.cursor()
-cursor.execute('''CREATE TABLE IF NOT EXISTS usuarios(
-            nome TEXT,
-            login TEXT,
-            senha TEXT,
-            saldo REAL               
+cursor.execute('''CREATE TABLE IF NOT EXISTS usuarios (
+               id INTEGER PRIMARY KEY AUTOINCREMENT,
+                nome TEXT NOT NULL,
+                login TEXT UNIQUE NOT NULL,
+                senha TEXT NOT NULL,
+                saldo REAL DEFAULT 0.0 NOT NULL             
 )
 ''')
 
@@ -28,18 +29,25 @@ cursor.execute('ALTER TABLE usuarios ADD COLUMN saldo NUMERIC')
 
 if __name__ == '__main__':
     while True:
-        print(f"Seja bem vindo ao Daniel's Bank\n")
-        print(f"[1.] Criar Conta")
-        print(f"[2.] Fazer Login")
-        print(f"[3.] Sair")
-        escolha = input()
+        defs.limpar_console()
+        defs.criar_barra()
+        print(f'\033[1;34m' "Seja bem vindo ao Daniel's Bank" '\033[0;0m')
+        defs.criar_barra()
+        print(f'\033[1;36m' "[1]" '\033[0;0m' " Criar Conta")
+        print(f'\033[1;36m' "[2]" '\033[0;0m' " Fazer Login")
+        print(f'\033[1;36m' "[3]" '\033[0;0m' " Sair...")
+        
+        escolha = input('\n')
 
         if escolha == "1":
+            defs.limpar_console()
             defs.cadastrar_dados()
         elif escolha == "2":
-            defs.acessar_sistema()
+            defs.limpar_console()
+            defs.fazer_login()
         elif escolha == "3":
-            print("Obrigado por usar nosso sistema!")
+            defs.limpar_console()
+            print('\033[1;31m'"Obrigado por usar nosso sistema!" '\033[0;0m')
             conn.close()
             break
         else:
