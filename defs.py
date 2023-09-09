@@ -107,16 +107,16 @@ def acessar_sistema():
 
         if escolha == '1':
             depositar()
-        #if escolha == '2':
-
+        if escolha == '2':
+            sacar()
         #if escolha == '3':
             
         #if escolha == '4':
 
         if escolha == '5':
             break
-        #else:
-            #print('Opção inválida.')
+        else:
+            print('Opção inválida.')
 
     
 def depositar():
@@ -160,3 +160,41 @@ def depositar():
                 print('\nOpção inválida')
                 break
                     
+def sacar():
+    d = 'ficar'
+    limpar_console()
+    while d == 'ficar':
+        criar_barra()
+        print('\033[1;33m' '--------<< Sacar >>---------' '\033[0;0m')
+        criar_barra()
+
+        print('Deixe em branco para voltar!')
+        criar_barra()
+        valor_a_sacar = input('Informe o valor que você quer sacar: ')
+
+        if valor_a_sacar == '':
+            d = 'sair'
+            limpar_console()
+
+        elif valor_a_sacar.isalpha() and float(valor_a_sacar) == '0':
+            limpar_console()
+            print('\nValor inexistente! Digite um valor válido\n')
+        else:
+            valor_a_sacar = float(valor_a_sacar)
+            cursor.execute('UPDATE usuarios SET saldo = saldo - ?', (valor_a_sacar))
+            conn.commit()
+            print(f'Saque de R${valor_a_sacar} efetuado com sucesso')
+            criar_barra()
+
+            print(f'\033[1;36m' "[S]" '\033[0;0m' " Sacar novamente")
+            print(f'\033[1;36m' "[N]" '\033[0;0m' " Voltar")
+            opçao = input('\n')
+            if opçao.lower() == 'n':
+                d = 'sair'
+                limpar_console()
+            elif opçao.lower() == 's':
+                limpar_console()                
+            else:
+                limpar_console()
+                print('\nOpção inválida')
+                break
