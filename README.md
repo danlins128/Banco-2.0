@@ -16,10 +16,10 @@ Depositar
 Sacar
 
 Transferir;
-  só pode transferir
-  com o id de outro
-  cliente que consta no banco de dados!
+---só pode transferir
+---com o id de outro
+---cliente que consta no banco de ---dados!
 
 Configurações;
-	alterar dados
-	excluir conta
+-----alterar dados
+-----excluir conta
