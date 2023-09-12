@@ -59,9 +59,6 @@ def cadastrar_dados():
         else:
             break
 
-        
-        
-
 def fazer_login():
     global usuario_login
     login = '.'
@@ -92,7 +89,6 @@ def fazer_login():
                 break
         else:
             break
-    
 
 def acessar_sistema():
     while True:
@@ -122,7 +118,6 @@ def acessar_sistema():
         else:
             print('Opção inválida.')
             continue
-
     
 def depositar():
     global usuario_login
@@ -289,14 +284,17 @@ def transferir():
                         criar_barra()
                         print(f'\033[1;36m' "[S]" '\033[0;0m' " Transferir novamente...")
                         print(f'\033[1;36m' "[N]" '\033[0;0m' " Sair...")
+                        criar_barra()
                         op1 = input('').lower()
+                        
                         if op1 == 's':
                             continue
-                        elif op1 != 'n':
+                        elif op1 == 'n':
                             criar_barra()
                             print('Voltando...')
-                            time.sleep(2)
+                            time.sleep(1.5)
                             limpar_console()
+                            d = 'sair'
                             break
                         
                     else:
@@ -317,11 +315,11 @@ def transferir():
                                 print('Voltando...')
                                 time.sleep(2)
                                 limpar_console()
+                                e = 'sair'
                                 break
                             else:
                                 limpar_console()              
                                 print('Opção inválida!')
                                 continue
                 except sqlite3.Error as e2:
-                    print(f'Não foi possível fazer transferia, confira os dados novamente.{e2}')       
-     
+                    print(f'Não foi possível fazer transferia, confira os dados novamente.{e2}')  
