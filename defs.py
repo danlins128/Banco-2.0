@@ -1,4 +1,5 @@
 # Funções para o Banco 2.0
+from sys import exit
 import time
 import os
 import sqlite3
@@ -33,10 +34,16 @@ def cadastrar_dados():
         
         nome = input("\nDigite seu nome: ")
         if nome != '0' and nome != '':
+            criar_barra()
+            print('Seu login deve ter no máximo 16 caracteres')
+            criar_barra()
             login = input("Digite seu login: ")
-            if login != '0' and login != '':
+            if login != '0' and login != '' and len(login) <=16:
+                criar_barra()
+                print('Sua senha deve conter 1 letra, 1 número e o mínimo de 5 caracteres')
+                criar_barra()
                 senha = input("Digite sua senha: ")
-                if senha != '0' and senha != '':
+                if senha != '0' and senha != '' and len(senha) >= 5 and any(c.isdigit() for c in senha) and any(c.isalpha() for c in senha):
                     cursor.execute("SELECT * FROM usuarios WHERE login = ? AND senha = ?", (login, senha))
                     validar = cursor.fetchone()
                     if validar:
@@ -111,12 +118,17 @@ def acessar_sistema():
             sacar()
         if escolha == '3':
             transferir()    
-        #if escolha == '4':
-
+        if escolha == '4':
+            limpar_console()
+            configuração()
         if escolha == '5':
             break
-        else:
+        #else:
+            limpar_console()
+            criar_barra()
             print('Opção inválida.')
+            criar_barra()
+            time.sleep(2)
             continue
     
 def depositar():
@@ -284,14 +296,17 @@ def transferir():
                         criar_barra()
                         print(f'\033[1;36m' "[S]" '\033[0;0m' " Transferir novamente...")
                         print(f'\033[1;36m' "[N]" '\033[0;0m' " Sair...")
+                        criar_barra()
                         op1 = input('').lower()
+                        
                         if op1 == 's':
                             continue
-                        elif op1 != 'n':
+                        elif op1 == 'n':
                             criar_barra()
                             print('Voltando...')
-                            time.sleep(2)
+                            time.sleep(1.5)
                             limpar_console()
+                            d = 'sair'
                             break
                         
                     else:
@@ -312,6 +327,7 @@ def transferir():
                                 print('Voltando...')
                                 time.sleep(2)
                                 limpar_console()
+                                e = 'sair'
                                 break
                             else:
                                 limpar_console()              
@@ -319,4 +335,115 @@ def transferir():
                                 continue
                 except sqlite3.Error as e2:
                     print(f'Não foi possível fazer transferia, confira os dados novamente.{e2}')  
-                         
+
+def configuração():
+    global usuario_login
+    d = 'ficar'
+    while d == 'ficar':        
+        criar_barra()
+        print('Configurações da conta')
+        criar_barra()
+        criar_barra()
+        print(f'\033[1;36m' "[1]" '\033[0;0m' " Excluir conta")
+        print(f'\033[1;36m' "[2]" '\033[0;0m' " Alterar senha")
+        print(f'\033[1;36m' "[0]" '\033[0;0m' " voltar...")
+        criar_barra()
+
+        op = input('')
+
+        if op == '':
+            limpar_console()
+            print('Opção inválida!')
+            time.sleep(1.5)
+            limpar_console()
+            continue
+        elif op == '1':
+            limpar_console()
+            criar_barra()
+            print('Deseja mesmo excluir sua conta?')
+            criar_barra()
+            escolha = input('S/N ').lower()
+            if escolha == 's':
+                limpar_console()
+                print('Excluindo seus dados... Por favor aguarde!')
+                time.sleep(2)
+                cursor.execute('DELETE FROM usuarios WHERE login =?',  (usuario_login,))
+                conn.commit()
+                conn.close()
+                print('Encerrando app...')
+                exit()                
+            elif escolha == 'n':
+                limpar_console()
+                print('Voltando...')
+                time.sleep(2)
+                d = 'sair'
+                break
+            else:
+                limpar_console()
+                print('Opção inválida!')
+                time.sleep(1.5)
+                limpar_console()
+                continue
+        elif op == '2':
+            s = 'ficar'
+            limpar_console()
+            criar_barra()
+            print('Alterar senha')
+            print('0 p/ voltar')            
+            criar_barra()
+            while s == 'ficar':                 
+                senha_atual = input('Digite sua senha atual: ')
+                if senha_atual == '0':
+                    limpar_console()
+                    print('Voltando..')
+                    time.sleep(1)
+                    limpar_console()
+                    s = 'sair'
+                else:
+                    senha_nova = input('Digite sua senha nova: ')
+                    senha_confirmar = input('Confirme sua nova senha: ')
+                    cursor.execute('SELECT senha FROM usuarios WHERE login = ? AND senha = ?',(usuario_login, senha_atual,))
+                    valida = cursor.fetchone()
+                
+                    if valida is None:
+                        limpar_console()
+                        print('Senha incorreta')
+                        time.sleep(1.5)
+                        limpar_console()
+                        continue
+                    elif senha_nova != senha_confirmar:
+                        limpar_console()
+                        criar_barra()
+                        print('Senhas fornecidas não coincidem!')
+                        criar_barra()
+                        time.sleep(1)
+                        continue
+                    elif len(senha_nova) < 5 or not any(c.isalpha() for c in senha_nova) or not any(c.isdigit() for c in senha_nova):
+                        limpar_console()
+                        criar_barra()
+                        print('ERRO! Sua senha deve ter pelo menos | 5 caracteres | 1 letra | 1 número |')
+                        criar_barra()
+                        time.sleep(1.5)                    
+                        continue
+                    else:
+                        limpar_console()
+                        cursor.execute('UPDATE usuarios SET senha = ? WHERE login = ?',(senha_nova, usuario_login,))
+                        conn.commit()
+                        criar_barra()
+                        print('Senha alterada com sucesso!')
+                        criar_barra()
+                        time.sleep(2)
+                        return
+        elif op == '0':
+            limpar_console()
+            print('Voltando...')
+            time.sleep(1.5)
+            limpar_console()
+            break
+        else:
+            limpar_console()
+            print('Opção inválida')
+            time.sleep(1)
+            limpar_console()
+            continue
+          
