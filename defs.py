@@ -54,11 +54,15 @@ def cadastrar_dados():
                         criar_barra()
         
                     else:
+                        limpar_console()
+                        criar_barra()
+                        print('\033[1;32m'"Cadastro efetuado com sucesso" '\033[')
+                        criar_barra()
                         cursor.execute("INSERT INTO usuarios (nome, login, senha) VALUES (?, ?, ?)", (nome, login, senha))
                         conn.commit()            
+                        time.sleep(2)
                         limpar_console()
-                        break
-                    
+                        break                    
                 else:
                     break
             else:
@@ -85,7 +89,8 @@ def fazer_login():
                     limpar_console()
                     criar_barra()
                     print('\033[1;32m' "Login efetuado com sucesso!" '\033[0;0m')
-                    criar_barra()                    
+                    criar_barra()
+                    time.sleep(2)                    
                     acessar_sistema()
                     login = ','                            
                 else:
@@ -114,16 +119,20 @@ def acessar_sistema():
 
         if escolha == '1':
             depositar()
+            continue
         if escolha == '2':
             sacar()
+            continue
         if escolha == '3':
             transferir()    
+            continue
         if escolha == '4':
             limpar_console()
             configuração()
+            continue
         if escolha == '5':
             break
-        #else:
+        else:
             limpar_console()
             criar_barra()
             print('Opção inválida.')
